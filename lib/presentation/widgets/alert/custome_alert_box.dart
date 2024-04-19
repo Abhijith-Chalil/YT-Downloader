@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:yt_downloader/core/constants/alert_const.dart';
+import 'package:yt_downloader/presentation/theme/colors/text_colors.dart';
 import 'package:yt_downloader/presentation/theme/styles/font_style.dart';
+import 'package:yt_downloader/presentation/widgets/spacer.dart';
 
 class CustomAlertBox {
   static showAlert(
@@ -15,8 +17,22 @@ class CustomAlertBox {
           duration: const Duration(seconds: 1),
           curve: Curves.bounceIn,
           child: AlertDialog(
-            title: const Text(kError),
-            content: Text(message ?? ""),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  kError,
+                  style: FontStyle.defaultText.copyWith(
+                      color: TextColor.error, fontWeight: FontWeight.bold),
+                ),
+                kH8,
+                Text(
+                  message ?? "",
+                  style: FontStyle.defaultText.copyWith(color: TextColor.alert),
+                ),
+              ],
+            ),
             actions: [
               GestureDetector(
                 onTap: () {
@@ -29,7 +45,7 @@ class CustomAlertBox {
                 child: Text(
                   "Ok",
                   style: FontStyle.defaultText.copyWith(
-                      color: Colors.black, fontWeight: FontWeight.bold),
+                      color: TextColor.alert, fontWeight: FontWeight.bold),
                 ),
               ),
             ],

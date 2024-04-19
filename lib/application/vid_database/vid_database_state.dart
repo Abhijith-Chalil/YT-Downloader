@@ -5,7 +5,7 @@ part of 'vid_database_bloc.dart';
 class VidDatabaseState {
   final List<YtVidMetaData> videos;
 
-  const VidDatabaseState({required this.videos});
+  const VidDatabaseState({required this.videos,});
 
   VidDatabaseState copyWith({
     List<YtVidMetaData>? videos,

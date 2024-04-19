@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:yt_downloader/application/vid_database/vid_database_bloc.dart';
 import 'package:yt_downloader/core/constants/alert_const.dart';
@@ -15,31 +14,28 @@ import 'package:yt_downloader/domain/models/vid_metadata.dart';
 part 'yt_download_event.dart';
 part 'yt_download_state.dart';
 
-@injectable
 class YtDownloadBloc extends Bloc<YtDownloadEvent, YtDownloadState> {
-  final IDownloadYtVidRepo _downloadRepo;
-  final VidDatabaseBloc _vidDatabaseBloc;
-  YtDownloadBloc(this._downloadRepo, this._vidDatabaseBloc)
-      : super(YtDownloadInitial()) {
+  YtDownloadBloc() : super(YtDownloadInitial()) {
     on<DownloadYtVideo>((event, emit) async {
-      bool isNewVideo = true;
-      final vidFromDb = _vidDatabaseBloc.state.videos;
+      final IDownloadYtVidRepo downloadRepo = getIt<IDownloadYtVidRepo>();
+
+      final vidFromDb = event.vidDatabaseBloc.state.videos;
       for (var element in vidFromDb) {
         if (element.ytVidUrl == event.ytVideoLink) {
-          isNewVideo = false;
+          emit(state.copyWith(isNewVideo: false));
         }
       }
-      if (isNewVideo) {
+      if (state.isNewVideo!) {
         try {
           emit(state.copyWith(ytMeataDataApiStatus: ApiStatus.loading));
-          final metaData = await _downloadRepo.getYtMetaData(
+          final metaData = await downloadRepo.getYtMetaData(
             ytVideoLink: event.ytVideoLink,
           );
           emit(state.copyWith(
               ytMeataDataApiStatus: ApiStatus.completed,
               vidDownloadingStats: ApiStatus.loading,
               ytVidMetaData: metaData));
-          final vidPath = await _downloadRepo.downloadYtVideo(
+          final vidPath = await downloadRepo.downloadYtVideo(
               updateProgress: (int progress) {
                 emit(state.copyWith(
                   progress: progress,
@@ -51,7 +47,8 @@ class YtDownloadBloc extends Bloc<YtDownloadEvent, YtDownloadState> {
           await VideoDb.storeVideo(updaetdMetaData);
           emit(state.copyWith(
               vidDownloadingStats: ApiStatus.completed,
-              ytVidMetaData: updaetdMetaData));
+              ytVidMetaData: updaetdMetaData,
+              isNewVideo: true));
         } on SocketException {
           emit(state.copyWith(
               ytMeataDataApiStatus: ApiStatus.error,

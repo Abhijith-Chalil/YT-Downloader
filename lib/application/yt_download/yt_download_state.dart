@@ -6,16 +6,16 @@ class YtDownloadState {
   final ApiStatus? ytMeataDataApiStatus;
   final YtVidMetaData? ytVidMetaData;
   final String? errorMessage;
-  final Stream<List<int>>? ytStream;
   final int? progress;
   final ApiStatus? vidDownloadingStats;
+  final bool? isNewVideo;
 
   const YtDownloadState(
       {this.ytMeataDataApiStatus,
       this.ytVidMetaData,
       this.vidDownloadingStats,
-      this.ytStream,
       this.progress,
+      this.isNewVideo,
       this.errorMessage});
 
   YtDownloadState copyWith(
@@ -24,14 +24,15 @@ class YtDownloadState {
       Stream<List<int>>? ytStream,
       String? errorMessage,
       ApiStatus? vidDownloadingStats,
+      bool? isNewVideo,
       int? progress}) {
     return YtDownloadState(
       ytMeataDataApiStatus: ytMeataDataApiStatus ?? this.ytMeataDataApiStatus,
       ytVidMetaData: ytVidMetaData ?? this.ytVidMetaData,
-      ytStream: ytStream ?? this.ytStream,
       errorMessage: errorMessage ?? this.errorMessage,
       vidDownloadingStats: vidDownloadingStats ?? this.vidDownloadingStats,
       progress: progress ?? this.progress,
+      isNewVideo: isNewVideo ?? this.isNewVideo,
     );
   }
 }
@@ -42,6 +43,7 @@ class YtDownloadInitial extends YtDownloadState {
             ytMeataDataApiStatus: ApiStatus.initial,
             vidDownloadingStats: ApiStatus.initial,
             progress: 0,
+            isNewVideo: true,
             ytVidMetaData: YtVidMetaData(
               title: "",
               description: "",

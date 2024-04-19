@@ -6,8 +6,7 @@ abstract class YtDownloadEvent {}
 
 class DownloadYtVideo extends YtDownloadEvent {
   final String ytVideoLink;
-  DownloadYtVideo({
-    required this.ytVideoLink,
-  });
-}
+  final VidDatabaseBloc vidDatabaseBloc;
 
+  DownloadYtVideo({required this.ytVideoLink, required this.vidDatabaseBloc});
+}

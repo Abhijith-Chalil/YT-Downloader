@@ -30,6 +30,10 @@ class VideoSearchTile extends StatelessWidget {
         } else if (state.vidDownloadingStats == ApiStatus.completed) {
           context.read<VidDatabaseBloc>().add(GetAllVidFromDb());
         }
+        if (!state.isNewVideo!) {
+          CustomAlertBox.showAlert(
+              context: context, message: "This Video Already Eixsts");
+        }
       },
       builder: (context, state) {
         return Column(
@@ -44,6 +48,7 @@ class VideoSearchTile extends StatelessWidget {
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
                       context.read<YtDownloadBloc>().add(DownloadYtVideo(
+                          vidDatabaseBloc: context.read<VidDatabaseBloc>(),
                           ytVideoLink: _controller.text.trim()));
                     }
                   },
