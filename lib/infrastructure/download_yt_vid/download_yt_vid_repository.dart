@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:injectable/injectable.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:yt_downloader/core/helpers/helpers.dart';
 import 'package:yt_downloader/domain/download_yt_vid/i_download_repo.dart';
@@ -20,10 +21,10 @@ class DownloadYtVidRepository implements IDownloadYtVidRepo {
       final manifest = await yt.videos.streamsClient.getManifest(ytVideoLink);
       final streamInfo = manifest.muxed.withHighestBitrate();
       final len = streamInfo.size.totalBytes;
-
       // Get the actual stream
       final stream = yt.videos.streamsClient.get(streamInfo);
-      final file = File("/storage/emulated/0/Download/$fileName.mp4");
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File("${directory.path}/${ytVideoLink.split("=").last}.mp4");
       if (file.existsSync()) {
         file.deleteSync();
       }
