@@ -47,6 +47,7 @@ class VideoSearchTile extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
+                      FocusManager.instance.primaryFocus?.unfocus();
                       context.read<YtDownloadBloc>().add(DownloadYtVideo(
                           vidDatabaseBloc: context.read<VidDatabaseBloc>(),
                           ytVideoLink: _controller.text.trim()));

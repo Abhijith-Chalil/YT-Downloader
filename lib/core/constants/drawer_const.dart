@@ -1,2 +1,2 @@
-const String kDownloadedVideos = "Downloaded Videos";
+const String kDownloadedVideo = "Downloaded Videos";
 const String kClearDownloadHistory = "Clear download history";

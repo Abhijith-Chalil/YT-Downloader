@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:yt_downloader/core/constants/drawer_const.dart';
 import 'package:yt_downloader/core/constants/home_screen_const.dart';
 import 'package:yt_downloader/presentation/screens/home/widgets/search_history_list.dart';
@@ -22,9 +23,11 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             customDrawerDeleteTile(
-              title: kDownloadedVideos,
+              title: kDownloadedVideo,
               icon: Icons.download,
-              onTap: () {},
+              onTap: () {
+                context.push("/videoList");
+              },
             ),
             customDrawerDeleteTile(
               title: kClearDownloadHistory,
