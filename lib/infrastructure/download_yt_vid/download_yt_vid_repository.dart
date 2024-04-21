@@ -29,11 +29,10 @@ class DownloadYtVidRepository implements IDownloadYtVidRepo {
       final directory = await getApplicationDocumentsDirectory();
       final file = File("${directory.path}/${ytVideoLink.split("=").last}.mp4");
       if (file.existsSync()) {
-        {
-          file.deleteSync();
-        }
-        fileStream = file.openWrite(mode: FileMode.writeOnlyAppend);
+        file.deleteSync();
       }
+
+      fileStream = file.openWrite(mode: FileMode.writeOnlyAppend);
 
       await for (final data in stream!) {
         // Keep track of the current downloaded data.
