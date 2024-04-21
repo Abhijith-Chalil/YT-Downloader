@@ -18,9 +18,8 @@ part 'yt_download_state.dart';
 
 class YtDownloadBloc extends Bloc<YtDownloadEvent, YtDownloadState> {
   YtDownloadBloc() : super(YtDownloadInitial()) {
+    final IDownloadYtVidRepo downloadRepo = getIt<IDownloadYtVidRepo>();
     on<DownloadYtVideo>((event, emit) async {
-      final IDownloadYtVidRepo downloadRepo = getIt<IDownloadYtVidRepo>();
-
       final vidFromDb = event.vidDatabaseBloc.state.videos;
       for (var element in vidFromDb) {
         if (element.ytVidUrl == event.ytVideoLink) {
@@ -31,13 +30,15 @@ class YtDownloadBloc extends Bloc<YtDownloadEvent, YtDownloadState> {
           await Helpers.requestPermission(Permission.storage);
       if (state.isNewVideo! && permissionGranted) {
         try {
-          emit(state.copyWith(ytMeataDataApiStatus: ApiStatus.loading));
+          emit(state.copyWith(
+            ytMeataDataApiStatus: ApiStatus.loading,
+            vidDownloadingStats: ApiStatus.loading,
+          ));
           final metaData = await downloadRepo.getYtMetaData(
             ytVideoLink: event.ytVideoLink,
           );
           emit(state.copyWith(
               ytMeataDataApiStatus: ApiStatus.completed,
-              vidDownloadingStats: ApiStatus.loading,
               ytVidMetaData: metaData));
           final vidPath = await downloadRepo.downloadYtVideo(
               updateProgress: (int progress) {
@@ -68,6 +69,11 @@ class YtDownloadBloc extends Bloc<YtDownloadEvent, YtDownloadState> {
               errorMessage: e.toString().split(":")[1]));
         }
       }
+    });
+
+    on<CancelDownloading>((event, emit) {
+      downloadRepo.cancelDownloading();
+      emit(state.copyWith(vidDownloadingStats: ApiStatus.initial, progress: 0));
     });
   }
 }

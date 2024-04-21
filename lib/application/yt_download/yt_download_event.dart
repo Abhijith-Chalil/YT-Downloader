@@ -10,3 +10,5 @@ class DownloadYtVideo extends YtDownloadEvent {
 
   DownloadYtVideo({required this.ytVideoLink, required this.vidDatabaseBloc});
 }
+
+class CancelDownloading extends YtDownloadEvent {}

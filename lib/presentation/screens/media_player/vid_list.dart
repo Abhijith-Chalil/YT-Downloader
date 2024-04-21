@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:yt_downloader/application/vid_database/vid_database_bloc.dart';
 import 'package:yt_downloader/core/constants/home_screen_const.dart';
+import 'package:yt_downloader/core/enums/enums.dart';
+import 'package:yt_downloader/presentation/theme/colors/app_color.dart';
 import 'package:yt_downloader/presentation/theme/colors/bg_colors.dart';
 import 'package:yt_downloader/presentation/theme/colors/text_colors.dart';
 import 'package:yt_downloader/presentation/theme/styles/font_style.dart';
@@ -16,6 +18,9 @@ class VideoList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<VidDatabaseBloc>().add(GetAllVidFromDb());
+    });
     return Scaffold(
       backgroundColor: BgColor.scaffold,
       appBar: AppBar(
@@ -27,15 +32,42 @@ class VideoList extends StatelessWidget {
             )),
         centerTitle: true,
       ),
-      body: SizedBox(
-        child: BlocBuilder<VidDatabaseBloc, VidDatabaseState>(
-          builder: (context, state) {
-            return Padding(
-              padding: const EdgeInsets.all(12),
-              child: ListView.separated(
-                  itemBuilder: (context, index) {
-                    final metaData = state.videos[index];
-                    return AnimatedListItem(
+      body: BlocBuilder<VidDatabaseBloc, VidDatabaseState>(
+        builder: (context, state) {
+          if (state.apiStatus == ApiStatus.loading) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: AppColor.themeColor,
+              ),
+            );
+          } else if (state.videos.isEmpty) {
+            return SizedBox(
+              height: 200,
+              child: Center(
+                  child: Text(
+                "No Videos Downloaded Yet",
+                style: FontStyle.defaultText.copyWith(
+                    color: TextColor.defaultText,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+              )),
+            );
+          }
+          return Padding(
+            padding: const EdgeInsets.all(12),
+            child: ListView.separated(
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  final metaData = state.videos[index];
+                  return Dismissible(
+                    key: Key(metaData.id.toString()),
+                    onDismissed: (direction) {
+                      context
+                          .read<VidDatabaseBloc>()
+                          .add(DeleteVideoFromDb(id: metaData.id));
+                    },
+                    direction: DismissDirection.endToStart,
+                    child: AnimatedListItem(
                       onTap: () {
                         // Navigate to player screen
                         context.push("/player", extra: metaData);
@@ -90,13 +122,13 @@ class VideoList extends StatelessWidget {
                           )
                         ],
                       ),
-                    );
-                  },
-                  separatorBuilder: (context, index) => const Divider(),
-                  itemCount: state.videos.length),
-            );
-          },
-        ),
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) => const Divider(),
+                itemCount: state.videos.length),
+          );
+        },
       ),
     );
   }

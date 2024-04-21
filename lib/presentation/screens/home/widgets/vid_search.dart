@@ -46,26 +46,35 @@ class VideoSearchTile extends StatelessWidget {
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
                       FocusManager.instance.primaryFocus?.unfocus();
-                      context.read<YtDownloadBloc>().add(DownloadYtVideo(
-                          vidDatabaseBloc: context.read<VidDatabaseBloc>(),
-                          ytVideoLink: _controller.text.trim()));
+                      if (state.vidDownloadingStats == ApiStatus.loading) {
+                        context.read<YtDownloadBloc>().add(CancelDownloading());
+                      } else {
+                        context.read<YtDownloadBloc>().add(DownloadYtVideo(
+                            vidDatabaseBloc: context.read<VidDatabaseBloc>(),
+                            ytVideoLink: _controller.text.trim()));
+                      }
                     }
                   },
-                  child: const CircleAvatar(
+                  child: CircleAvatar(
                     radius: 28,
                     backgroundColor: AppColor.themeColor,
-                    child: Icon(
-                      Icons.download,
-                      color: BgColor.iconColor,
-                    ),
+                    child: state.vidDownloadingStats != ApiStatus.loading
+                        ? const Icon(
+                            Icons.download,
+                            color: BgColor.iconColor,
+                          )
+                        : const Icon(
+                            Icons.close,
+                            color: BgColor.iconColor,
+                          ),
                   ),
                 )
               ],
             ),
             kH20,
             AnimatedContainer(
-              duration: const Duration(seconds: 2),
-              curve: Curves.bounceInOut,
+              duration: const Duration(seconds: 1),
+              curve: Curves.easeIn,
               alignment: Alignment.bottomLeft,
               height:
                   state.ytMeataDataApiStatus == ApiStatus.completed ? 200 : 0,

@@ -3,19 +3,20 @@ part of 'vid_database_bloc.dart';
 
 @immutable
 class VidDatabaseState {
+  final ApiStatus? apiStatus;
   final List<YtVidMetaData> videos;
 
-  const VidDatabaseState({required this.videos,});
+  const VidDatabaseState({required this.videos, this.apiStatus});
 
   VidDatabaseState copyWith({
+    ApiStatus? apiStatus,
     List<YtVidMetaData>? videos,
   }) {
     return VidDatabaseState(
-      videos: videos ?? this.videos,
-    );
+        videos: videos ?? this.videos, apiStatus: apiStatus ?? this.apiStatus);
   }
 }
 
 final class VidDatabaseInitial extends VidDatabaseState {
-  VidDatabaseInitial() : super(videos: []);
+  VidDatabaseInitial() : super(videos: [], apiStatus: ApiStatus.initial);
 }

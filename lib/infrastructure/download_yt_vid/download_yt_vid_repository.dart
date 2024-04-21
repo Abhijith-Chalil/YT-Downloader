@@ -12,6 +12,8 @@ import 'package:yt_downloader/domain/models/vid_metadata.dart';
 @LazySingleton(as: IDownloadYtVidRepo)
 class DownloadYtVidRepository implements IDownloadYtVidRepo {
   final yt = YoutubeExplode();
+  IOSink? fileStream;
+  Stream<List<int>>? stream;
   @override
   Future<String> downloadYtVideo(
       {required String ytVideoLink,
@@ -23,26 +25,29 @@ class DownloadYtVidRepository implements IDownloadYtVidRepo {
       final streamInfo = manifest.muxed.withHighestBitrate();
       final len = streamInfo.size.totalBytes;
       // Get the actual stream
-      final stream = yt.videos.streamsClient.get(streamInfo);
+      stream = yt.videos.streamsClient.get(streamInfo);
       final directory = await getApplicationDocumentsDirectory();
       final file = File("${directory.path}/${ytVideoLink.split("=").last}.mp4");
       if (file.existsSync()) {
-        file.deleteSync();
+        {
+          file.deleteSync();
+        }
+        fileStream = file.openWrite(mode: FileMode.writeOnlyAppend);
       }
-      final fileStream = file.openWrite(mode: FileMode.writeOnlyAppend);
 
-      await for (final data in stream) {
+      await for (final data in stream!) {
         // Keep track of the current downloaded data.
         count += data.length;
         // Calculate the current progress.
         final int progress = ((count / len) * 100).ceil();
         updateProgress(progress);
         // Write to file.
-        fileStream.add(data);
+        fileStream?.add(data);
       }
 
-      await fileStream.flush();
-      await fileStream.close();
+      await fileStream?.flush();
+      await fileStream?.close();
+      stream = null;
       return file.path;
     } catch (e) {
       rethrow;
@@ -85,5 +90,11 @@ class DownloadYtVidRepository implements IDownloadYtVidRepo {
     } catch (e) {
       rethrow;
     }
+  }
+
+  @override
+  Future<void> cancelDownloading() async {
+    await fileStream?.close();
+    stream = null;
   }
 }
