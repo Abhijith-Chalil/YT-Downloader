@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yt_downloader/application/vid_database/vid_database_bloc.dart';
 import 'package:yt_downloader/application/yt_download/yt_download_bloc.dart';
@@ -64,31 +62,6 @@ class VideoSearchTile extends StatelessWidget {
                 )
               ],
             ),
-            // kH14,
-            // ElevatedButton(
-            //   onPressed: () {
-            //     if (_formKey.currentState!.validate()) {
-            //       context.read<YtDownloadBloc>().add(
-            //           DownloadYtVideo(ytVideoLink: _controller.text.trim()));
-            //     }
-            //   },
-            //   style: ElevatedButton.styleFrom(
-            //       foregroundColor: Colors.white,
-            //       backgroundColor: BgColor.button,
-            //       padding:
-            //           const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-            //       textStyle: const TextStyle(fontSize: 18),
-            //       shape: RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(8))),
-            //   child: const Wrap(
-            //     spacing: 5,
-            //     crossAxisAlignment: WrapCrossAlignment.center,
-            //     children: [
-            //       Text(kDownload, style: FontStyle.defaultText),
-            //       Icon(Icons.download)
-            //     ],
-            //   ),
-            // ),
             kH20,
             AnimatedContainer(
               duration: const Duration(seconds: 2),
@@ -103,7 +76,7 @@ class VideoSearchTile extends StatelessWidget {
                   image: state.ytMeataDataApiStatus == ApiStatus.completed
                       ? DecorationImage(
                           image: NetworkImage(
-                              state.ytVidMetaData!.thumbnail ?? ""),
+                              state.ytVidMetaData!.thumbnailUrl ?? ""),
                           fit: BoxFit.cover)
                       : null),
               child: SingleChildScrollView(

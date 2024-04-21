@@ -2,13 +2,15 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:yt_downloader/application/vid_database/vid_database_bloc.dart';
 import 'package:yt_downloader/core/constants/alert_const.dart';
 import 'package:yt_downloader/core/constants/urls.dart';
 import 'package:yt_downloader/core/di/injectable.dart';
 import 'package:yt_downloader/core/enums/enums.dart';
+import 'package:yt_downloader/core/helpers/helpers.dart';
 import 'package:yt_downloader/domain/download_yt_vid/i_download_repo.dart';
-import 'package:yt_downloader/domain/models/database/db_vid.dart';
+import 'package:yt_downloader/core/database/db_vid.dart';
 import 'package:yt_downloader/domain/models/vid_metadata.dart';
 
 part 'yt_download_event.dart';
@@ -25,7 +27,9 @@ class YtDownloadBloc extends Bloc<YtDownloadEvent, YtDownloadState> {
           emit(state.copyWith(isNewVideo: false));
         }
       }
-      if (state.isNewVideo!) {
+      bool permissionGranted =
+          await Helpers.requestPermission(Permission.storage);
+      if (state.isNewVideo! && permissionGranted) {
         try {
           emit(state.copyWith(ytMeataDataApiStatus: ApiStatus.loading));
           final metaData = await downloadRepo.getYtMetaData(
@@ -43,7 +47,11 @@ class YtDownloadBloc extends Bloc<YtDownloadEvent, YtDownloadState> {
               },
               ytVideoLink: event.ytVideoLink,
               fileName: metaData!.title ?? "ytVid");
-          final updaetdMetaData = metaData.copyWith(videoPath: vidPath);
+          final updaetdMetaData = metaData.copyWith(
+            videoPath: vidPath,
+            thumbnail: await downloadRepo.downloadAndSaveImage(
+                url: metaData.thumbnailUrl!),
+          );
           await VideoDb.storeVideo(updaetdMetaData);
           emit(state.copyWith(
               vidDownloadingStats: ApiStatus.completed,

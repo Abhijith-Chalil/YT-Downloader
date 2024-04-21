@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -64,12 +65,25 @@ class DownloadYtVidRepository implements IDownloadYtVidRepo {
       return YtVidMetaData(
           title: title,
           description: video.description,
-          thumbnail: video.thumbnails.mediumResUrl,
+          thumbnailUrl: video.thumbnails.mediumResUrl,
           ytVidUrl: ytVideoLink,
           duration: Helpers.formatDuration(video.duration!));
     } catch (e) {
       log(e.toString());
       return null;
+    }
+  }
+
+  @override
+  Future<String> downloadAndSaveImage({required String url}) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final filePath =
+        "${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+    try {
+      await Dio().download(url, filePath);
+      return filePath;
+    } catch (e) {
+      rethrow;
     }
   }
 }

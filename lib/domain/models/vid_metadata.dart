@@ -9,6 +9,7 @@ class YtVidMetaData {
   final String? title;
   final String? description;
   final String? thumbnail;
+  final String? thumbnailUrl;
   final String? duration;
   final String? ytVidUrl;
   late final String? videoPath;
@@ -18,24 +19,25 @@ class YtVidMetaData {
       this.description,
       this.thumbnail,
       this.duration,
+      this.thumbnailUrl,
       this.ytVidUrl,
       this.videoPath});
 
-  YtVidMetaData copyWith({
-    String? title,
-    String? description,
-    String? thumbnail,
-    String? duration,
-    String? videoPath,
-    String? ytVidUrl,
-  }) {
+  YtVidMetaData copyWith(
+      {String? title,
+      String? description,
+      String? thumbnail,
+      String? duration,
+      String? videoPath,
+      String? ytVidUrl,
+      String? thumbnailUrl}) {
     return YtVidMetaData(
-      title: title ?? this.title,
-      description: description ?? this.description,
-      thumbnail: thumbnail ?? this.thumbnail,
-      duration: duration ?? this.duration,
-      videoPath: videoPath ?? this.videoPath,
-      ytVidUrl: ytVidUrl ?? this.ytVidUrl,
-    );
+        title: title ?? this.title,
+        description: description ?? this.description,
+        thumbnail: thumbnail ?? this.thumbnail,
+        duration: duration ?? this.duration,
+        videoPath: videoPath ?? this.videoPath,
+        ytVidUrl: ytVidUrl ?? this.ytVidUrl,
+        thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl);
   }
 }

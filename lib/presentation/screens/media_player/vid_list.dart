@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -46,14 +48,13 @@ class VideoList extends StatelessWidget {
                           Container(
                             width: 80,
                             height: 80,
-                            decoration: const BoxDecoration(
-                                // image: DecorationImage(
-                                //     image: NetworkImage(
-                                //         imageBaseUrl + (data.posterPath ?? "")),
-                                //     fit: BoxFit.cover),
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: FileImage(File(metaData.thumbnail!)),
+                                    fit: BoxFit.cover),
                                 color: Colors.white,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(8))),
+                                    const BorderRadius.all(Radius.circular(8))),
                           ),
                           Expanded(
                             child: Padding(

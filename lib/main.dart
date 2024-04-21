@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yt_downloader/application/vid_database/vid_database_bloc.dart';
 import 'package:yt_downloader/application/yt_download/yt_download_bloc.dart';
 import 'package:yt_downloader/core/di/injectable.dart';
-import 'package:yt_downloader/domain/models/database/db_vid.dart';
+import 'package:yt_downloader/core/database/db_vid.dart';
 import 'package:yt_downloader/presentation/routes/routes.dart';
 
 Future<void> main() async {
