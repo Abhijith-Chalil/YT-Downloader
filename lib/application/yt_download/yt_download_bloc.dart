@@ -33,8 +33,9 @@ class YtDownloadBloc extends Bloc<YtDownloadEvent, YtDownloadState> {
       }
 
       /// - Requests storage permission if the video is new.
-      bool permissionGranted =
-          await Helpers.requestPermission(Permission.storage);
+      final osVersion = await Helpers.getAndroidVersion();
+      bool permissionGranted = await Helpers.requestPermission(
+          int.parse(osVersion!) > 12 ? Permission.videos : Permission.storage);
       if (state.isNewVideo! && permissionGranted) {
         try {
           emit(state.copyWith(

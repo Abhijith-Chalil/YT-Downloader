@@ -1,3 +1,7 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class Helpers {
@@ -34,5 +38,15 @@ class Helpers {
         return false;
       }
     }
+  }
+
+  static Future<String?> getAndroidVersion() async {
+    if (Platform.isAndroid) {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      log(androidInfo.version.release);
+      return androidInfo.version.release;
+    }
+    return null;
   }
 }
