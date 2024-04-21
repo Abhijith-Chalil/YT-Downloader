@@ -60,7 +60,9 @@ class VideoList extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(12),
             child: ListView.separated(
+                physics: const ClampingScrollPhysics(),
                 shrinkWrap: true,
+                reverse: true,
                 itemBuilder: (context, index) {
                   final metaData = state.videos[index];
                   return Dismissible(

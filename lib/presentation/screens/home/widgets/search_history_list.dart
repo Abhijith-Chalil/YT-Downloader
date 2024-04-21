@@ -37,6 +37,8 @@ class SearchHistoryList extends StatelessWidget {
                 kH20,
                 ListView.separated(
                     shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    reverse: true,
                     itemBuilder: (context, index) {
                       final metaData = state.videos[index];
                       return AnimatedListItem(

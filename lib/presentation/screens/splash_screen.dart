@@ -19,17 +19,20 @@ class SplashScreen extends StatelessWidget {
     });
     return Scaffold(
       backgroundColor: BgColor.scaffold,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Lottie.asset('assets/lotties/splash.json'),
-          kH20,
-          Text(
-            kAppName,
-            style: FontStyle.defaultText
-                .copyWith(fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-        ],
+      body: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset('assets/lotties/splash.json'),
+            kH20,
+            Text(
+              kAppName,
+              style: FontStyle.defaultText
+                  .copyWith(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -39,9 +39,9 @@ class YtDownloadBloc extends Bloc<YtDownloadEvent, YtDownloadState> {
       if (state.isNewVideo! && permissionGranted) {
         try {
           emit(state.copyWith(
-            ytMeataDataApiStatus: ApiStatus.loading,
-            vidDownloadingStats: ApiStatus.loading,
-          ));
+              ytMeataDataApiStatus: ApiStatus.loading,
+              vidDownloadingStats: ApiStatus.loading,
+              progress: 0));
 
           /// - Fetches the video metadata from YouTube.
           final metaData = await downloadRepo.getYtMetaData(
@@ -70,9 +70,11 @@ class YtDownloadBloc extends Bloc<YtDownloadEvent, YtDownloadState> {
           await VideoDb.storeVideo(updaetdMetaData);
 
           /// - Emits the appropriate state changes during the download process.
+          await Future.delayed(const Duration(seconds: 1));
           emit(state.copyWith(
               vidDownloadingStats: ApiStatus.completed,
               ytVidMetaData: updaetdMetaData,
+              ytMeataDataApiStatus: ApiStatus.initial,
               isNewVideo: true));
         } on SocketException {
           emit(state.copyWith(

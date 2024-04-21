@@ -97,7 +97,7 @@ class DownloadYtVidRepository implements IDownloadYtVidRepo {
           duration: Helpers.formatDuration(video.duration!));
     } catch (e) {
       log(e.toString());
-      return null;
+      rethrow;
     }
   }
 
