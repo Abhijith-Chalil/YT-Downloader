@@ -20,17 +20,21 @@ class VideoSearchTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<YtDownloadBloc, YtDownloadState>(
       listener: (context, state) {
+        /// Handles the different states of the video download process.
+        /// If there is an error fetching the video metadata, it shows an alert with the error message.
         if (state.ytMeataDataApiStatus == ApiStatus.error) {
           CustomAlertBox.showAlert(
             context: context,
             message: state.errorMessage,
           );
         } else if (state.vidDownloadingStats == ApiStatus.completed) {
+          /// If the video download is completed, it triggers the `GetAllVidFromDb` event to update the video database.
           context.read<VidDatabaseBloc>().add(GetAllVidFromDb());
         }
         if (!state.isNewVideo!) {
+          /// If the video is not new, it shows an alert indicating that the video already exists.
           CustomAlertBox.showAlert(
-              context: context, message: "This Video Already Eixsts");
+              context: context, message: kThisVideoAlreadyEixsts);
         }
       },
       builder: (context, state) {
@@ -44,11 +48,19 @@ class VideoSearchTile extends StatelessWidget {
                 kW4,
                 GestureDetector(
                   onTap: () {
+                    /// Validates the form and either cancels the current video download or initiates a new download.
+                    /// If the form is valid, this code block performs the following actions:
                     if (_formKey.currentState!.validate()) {
+                      /// - Unfocuses the primary focus on the screen to dismiss any active keyboard
                       FocusManager.instance.primaryFocus?.unfocus();
+
+                      /// - Checks the current state of the video download
                       if (state.vidDownloadingStats == ApiStatus.loading) {
+                        ///   - If the download is in progress, it cancels the current download
                         context.read<YtDownloadBloc>().add(CancelDownloading());
                       } else {
+                        ///   - If the download is not in progress, it initiates a new download by dispatching the `DownloadYtVideo` event to the `YtDownloadBloc`
+                        /// The `YtDownloadBloc` and `VidDatabaseBloc` instances are obtained from the context to perform the download and database operations.
                         context.read<YtDownloadBloc>().add(DownloadYtVideo(
                             vidDatabaseBloc: context.read<VidDatabaseBloc>(),
                             ytVideoLink: _controller.text.trim()));

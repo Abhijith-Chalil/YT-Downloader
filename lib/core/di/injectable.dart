@@ -6,6 +6,9 @@ import 'package:yt_downloader/core/di/injectable.config.dart';
 
 final getIt = GetIt.instance;
 
+/// Configures the dependency injection for the application.
+/// This function sets up the GetIt instance with the necessary dependencies,
+/// including the [VidDatabaseBloc] and [YtDownloadBloc] factories.
 @InjectableInit()
 Future<void> configureInjection() async {
   getIt.init(environment: Environment.prod);

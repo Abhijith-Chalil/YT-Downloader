@@ -19,13 +19,20 @@ part 'yt_download_state.dart';
 class YtDownloadBloc extends Bloc<YtDownloadEvent, YtDownloadState> {
   YtDownloadBloc() : super(YtDownloadInitial()) {
     final IDownloadYtVidRepo downloadRepo = getIt<IDownloadYtVidRepo>();
+
+    /// Handles the event to download a YouTube video.
+    /// This event handler is responsible for the following:
     on<DownloadYtVideo>((event, emit) async {
       final vidFromDb = event.vidDatabaseBloc.state.videos;
+
+      /// - Checks if the video is already downloaded and stored in the database.
       for (var element in vidFromDb) {
         if (element.ytVidUrl == event.ytVideoLink) {
           emit(state.copyWith(isNewVideo: false));
         }
       }
+
+      /// - Requests storage permission if the video is new.
       bool permissionGranted =
           await Helpers.requestPermission(Permission.storage);
       if (state.isNewVideo! && permissionGranted) {
@@ -34,12 +41,16 @@ class YtDownloadBloc extends Bloc<YtDownloadEvent, YtDownloadState> {
             ytMeataDataApiStatus: ApiStatus.loading,
             vidDownloadingStats: ApiStatus.loading,
           ));
+
+          /// - Fetches the video metadata from YouTube.
           final metaData = await downloadRepo.getYtMetaData(
             ytVideoLink: event.ytVideoLink,
           );
           emit(state.copyWith(
               ytMeataDataApiStatus: ApiStatus.completed,
               ytVidMetaData: metaData));
+
+          /// - Downloads the video and saves it to the file system.
           final vidPath = await downloadRepo.downloadYtVideo(
               updateProgress: (int progress) {
                 emit(state.copyWith(
@@ -48,12 +59,16 @@ class YtDownloadBloc extends Bloc<YtDownloadEvent, YtDownloadState> {
               },
               ytVideoLink: event.ytVideoLink,
               fileName: metaData!.title ?? "ytVid");
+
+          /// - Stores the updated video metadata in the database.
           final updaetdMetaData = metaData.copyWith(
             videoPath: vidPath,
             thumbnail: await downloadRepo.downloadAndSaveImage(
                 url: metaData.thumbnailUrl!),
           );
           await VideoDb.storeVideo(updaetdMetaData);
+
+          /// - Emits the appropriate state changes during the download process.
           emit(state.copyWith(
               vidDownloadingStats: ApiStatus.completed,
               ytVidMetaData: updaetdMetaData,

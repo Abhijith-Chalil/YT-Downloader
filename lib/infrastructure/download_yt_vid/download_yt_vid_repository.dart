@@ -14,6 +14,19 @@ class DownloadYtVidRepository implements IDownloadYtVidRepo {
   final yt = YoutubeExplode();
   IOSink? fileStream;
   Stream<List<int>>? stream;
+
+  /// Downloads a YouTube video and saves it to the device's file system.
+  /// This method retrieves the video stream with the highest bitrate, downloads the
+  /// video data, and saves it to a file in the application's documents directory.
+  /// The progress of the download is reported via the `updateProgress` callback.
+  /// Parameters:
+  /// - `ytVideoLink`: The URL of the YouTube video to download.
+  /// - `fileName`: The name of the file to save the downloaded video to.
+  /// - `updateProgress`: A callback function that is called periodically to report
+  ///   the progress of the download. The callback is passed an integer value
+  ///   representing the current download progress as a percentage.
+  /// Returns:
+  /// The file path of the downloaded video.
   @override
   Future<String> downloadYtVideo(
       {required String ytVideoLink,
@@ -53,6 +66,15 @@ class DownloadYtVidRepository implements IDownloadYtVidRepo {
     }
   }
 
+  /// Retrieves the metadata for a YouTube video given the video link.
+  /// This method attempts to fetch the video metadata from the YouTube API, including the
+  /// video title, description, thumbnail URL, and duration. If the API call is successful,
+  /// the metadata is returned as a [YtVidMetaData] object. If the API call fails, `null` is
+  /// returned.
+  /// Parameters:
+  /// - `ytVideoLink`: The URL of the YouTube video to retrieve metadata for.
+  /// Returns:
+  /// A [YtVidMetaData] object containing the video metadata, or `null` if the API call fails.
   @override
   Future<YtVidMetaData?> getYtMetaData({required String ytVideoLink}) async {
     try {
@@ -78,6 +100,11 @@ class DownloadYtVidRepository implements IDownloadYtVidRepo {
     }
   }
 
+  /// Downloads an image from the provided URL and saves it to the application documents directory.
+  /// Parameters:
+  /// - `url`: The URL of the image to download.
+  /// Returns:
+  /// The file path of the downloaded image.
   @override
   Future<String> downloadAndSaveImage({required String url}) async {
     final directory = await getApplicationDocumentsDirectory();
@@ -91,6 +118,9 @@ class DownloadYtVidRepository implements IDownloadYtVidRepo {
     }
   }
 
+  /// Cancels the ongoing file download by closing the file stream and setting it to null.
+  /// This method is used to stop an active file download process. It closes the underlying file stream
+  /// and sets the `stream` property to `null`, effectively canceling the download operation.
   @override
   Future<void> cancelDownloading() async {
     await fileStream?.close();

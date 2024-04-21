@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:yt_downloader/application/vid_database/vid_database_bloc.dart';
 import 'package:yt_downloader/core/constants/home_screen_const.dart';
+import 'package:yt_downloader/core/constants/media_player_const.dart';
 import 'package:yt_downloader/core/enums/enums.dart';
 import 'package:yt_downloader/presentation/theme/colors/app_color.dart';
 import 'package:yt_downloader/presentation/theme/colors/bg_colors.dart';
@@ -18,6 +19,9 @@ class VideoList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// Adds a callback to be executed after the first frame is rendered.
+    /// The callback is used to dispatch the `GetAllVidFromDb` event to the `VidDatabaseBloc`,
+    /// which will fetch all the downloaded videos from the database and update the UI.
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context.read<VidDatabaseBloc>().add(GetAllVidFromDb());
     });
@@ -45,7 +49,7 @@ class VideoList extends StatelessWidget {
               height: 200,
               child: Center(
                   child: Text(
-                "No Videos Downloaded Yet",
+                kNoVideosDownloadedYet,
                 style: FontStyle.defaultText.copyWith(
                     color: TextColor.defaultText,
                     fontWeight: FontWeight.bold,
@@ -106,13 +110,13 @@ class VideoList extends StatelessWidget {
                                   kH4,
                                   Text(
                                     metaData.description ??
-                                        "No description available",
+                                        kNodescriptionavailable,
                                     style: FontStyle.defaultText,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   kH4,
                                   Text(
-                                    "Duration: ${metaData.duration}",
+                                    "$kDuration ${metaData.duration}",
                                     style: FontStyle.defaultText,
                                     overflow: TextOverflow.ellipsis,
                                   )

@@ -28,7 +28,7 @@ class SearchHistoryList extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "Search History",
+                  kSearchHistory,
                   style: FontStyle.defaultText.copyWith(
                       color: TextColor.defaultText,
                       fontWeight: FontWeight.bold,
@@ -48,7 +48,7 @@ class SearchHistoryList extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            metaData.title ?? "No Title",
+                            metaData.title ?? kNoTitle,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: FontStyle.defaultText,

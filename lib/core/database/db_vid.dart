@@ -4,6 +4,9 @@ import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:yt_downloader/domain/models/vid_metadata.dart';
 
+/// Provides a set of methods to interact with the Isar database for storing and retrieving YtVidMetaData objects.
+/// The [VideoDb] class is responsible for initializing the Isar database, storing video metadata, retrieving all stored videos, deleting a specific video, and deleting all stored videos.
+/// To use the [VideoDb] class, you must first call the [initialize] method to set up the Isar database. After that, you can call the other methods to perform CRUD operations on the video metadata.
 class VideoDb {
   static late Isar isar;
   static Future<void> initialize() async {
