@@ -40,7 +40,8 @@ class DownloadYtVidRepository implements IDownloadYtVidRepo {
       // Get the actual stream
       stream = yt.videos.streamsClient.get(streamInfo);
       final directory = await getApplicationDocumentsDirectory();
-      final file = File("${directory.path}/${ytVideoLink.split("=").last}.mp4");
+      final file = File(
+          "${directory.path}/${DateTime.now().millisecondsSinceEpoch}.mp4");
       if (file.existsSync()) {
         file.deleteSync();
       }
