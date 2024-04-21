@@ -12,11 +12,11 @@ A Flutter app that allows you to download YouTube videos and store them locally 
 ## Getting Started
 
 1. Clone the repository
-2. Install dependencies
-   Run below command in the root of the project
-   "flutter pub get"
-   "flutter packages pub run build_runner build  --delete-conflicting-outputs"
-   "flutter pub run flutter_launcher_icons"
+2. Install dependencies <br />
+   Run below command in the root of the project : <br />
+   "flutter pub get"<br />
+   "flutter packages pub run build_runner build  --delete-conflicting-outputs"<br />
+   "flutter pub run flutter_launcher_icons"<br />
 
 ## Usage
 
