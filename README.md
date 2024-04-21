@@ -1,6 +1,6 @@
 # YT Downloader
 
-A Flutter app that allows you to download YouTube videos and store them locally for offline viewing. This app uses the [youtube_explode_dart](https://pub.dev/packages/youtube_explode_dart) package for downloading videos and the [isar](https://pub.dev/packages/isar) package for local storage. Playback of downloaded videos is handled by the [better_player](https://pub.dev/packages/better_player) package.
+A Flutter app that allows you to download YouTube videos and store them locally for offline viewing. This app uses the [youtube_explode_dart](https://pub.dev/packages/youtube_explode_dart) package for downloading videos and the [isar](https://pub.dev/packages/isar) package for local storage. Playback of downloaded videos is handled by the [better_player](https://pub.dev/packages/better_player) package. Routing is implemented using the [go_router](https://pub.dev/packages/go_router) package.
 
 ## Features
 
