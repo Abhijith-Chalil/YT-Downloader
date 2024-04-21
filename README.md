@@ -25,7 +25,7 @@ A Flutter app that allows you to download YouTube videos and store them locally 
 3. Once the download is complete, the video will be saved in the local database.
 4. Access the "Downloaded Videos" section to view and play your downloaded videos.
 
-## Architecture
+## Architecture - Domain-Driven Design (DDD)
 
 This app follows the BLoC (Business Logic Component) pattern for state management, using the [flutter_bloc](https://pub.dev/packages/flutter_bloc) package. Dependency injection is implemented with the [get_it](https://pub.dev/packages/get_it) package.
 
