@@ -10,7 +10,6 @@ class DeleteVideoFromDb extends VidDatabaseEvent {
   final int id;
   DeleteVideoFromDb({
     required this.id,
-
   });
 }
 
@@ -19,3 +18,5 @@ class StoreVidToDb extends VidDatabaseEvent {
 
   StoreVidToDb({required this.ytVidMetaData});
 }
+
+class DeleteAllVideos extends VidDatabaseEvent {}

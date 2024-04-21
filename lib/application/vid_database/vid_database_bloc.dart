@@ -27,5 +27,9 @@ class VidDatabaseBloc extends Bloc<VidDatabaseEvent, VidDatabaseState> {
         videos: videos,
       ));
     });
+    on<DeleteAllVideos>((event, emit) async {
+      await VideoDb.deleteAllVideos();
+      add(GetAllVidFromDb());
+    });
   }
 }

@@ -24,4 +24,8 @@ class VideoDb {
   static Future<bool> deleteVideo(int id) async {
     return await isar.writeTxn(() => isar.ytVidMetaDatas.delete(id));
   }
+
+  static Future<void> deleteAllVideos() async {
+    return await isar.writeTxn(() => isar.ytVidMetaDatas.clear());
+  }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:yt_downloader/application/vid_database/vid_database_bloc.dart';
 import 'package:yt_downloader/core/constants/drawer_const.dart';
 import 'package:yt_downloader/core/constants/home_screen_const.dart';
 import 'package:yt_downloader/presentation/screens/home/widgets/search_history_list.dart';
@@ -26,12 +28,16 @@ class HomeScreen extends StatelessWidget {
               title: kDownloadedVideo,
               icon: Icons.download,
               onTap: () {
+                context.pop();
                 context.push("/videoList");
               },
             ),
             customDrawerDeleteTile(
               title: kClearDownloadHistory,
-              onTap: () {},
+              onTap: () {
+                context.pop();
+                context.read<VidDatabaseBloc>().add(DeleteAllVideos());
+              },
             ),
             kH50,
           ],

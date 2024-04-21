@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:yt_downloader/application/vid_database/vid_database_bloc.dart';
+import 'package:yt_downloader/presentation/theme/colors/bg_colors.dart';
+import 'package:yt_downloader/presentation/theme/styles/font_style.dart';
+import 'package:yt_downloader/presentation/widgets/spacer.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -12,12 +16,19 @@ class SplashScreen extends StatelessWidget {
     Future.delayed(const Duration(seconds: 2), () {
       context.goNamed('/home');
     });
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          "YT Downloader",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
+    return Scaffold(
+      backgroundColor: BgColor.scaffold,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/lotties/splash.json'),
+          kH20,
+          Text(
+            "YT Downloader",
+            style: FontStyle.defaultText
+                .copyWith(fontWeight: FontWeight.bold, fontSize: 24),
+          ),
+        ],
       ),
     );
   }
