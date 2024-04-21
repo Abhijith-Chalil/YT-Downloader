@@ -1,9 +1,3 @@
-import 'dart:developer';
-import 'dart:io';
-
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
-
 class Helpers {
   /// Formats a [Duration] object as a string in the format "HH:MM:SS".
   /// This method takes a [Duration] object and returns a string representation of
@@ -23,30 +17,4 @@ class Helpers {
     return '$hours:$minutes:$seconds';
   }
 
-  /// Requests the specified [permission] and returns `true` if the permission is granted, `false` otherwise.
-  /// This method first checks if the permission is already granted. If so, it returns `true` immediately.
-  /// If the permission is not granted, it requests the permission and returns `true` if the request is successful,
-  /// or `false` if the request is denied or fails.
-  static Future<bool> requestPermission(Permission permission) async {
-    if (await permission.isGranted) {
-      return true;
-    } else {
-      var result = await permission.request();
-      if (result == PermissionStatus.granted) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
-
-  static Future<String?> getAndroidVersion() async {
-    if (Platform.isAndroid) {
-      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      log(androidInfo.version.release);
-      return androidInfo.version.release;
-    }
-    return null;
-  }
 }

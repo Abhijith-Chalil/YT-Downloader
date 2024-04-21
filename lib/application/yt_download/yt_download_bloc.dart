@@ -2,13 +2,11 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:yt_downloader/application/vid_database/vid_database_bloc.dart';
 import 'package:yt_downloader/core/constants/alert_const.dart';
 import 'package:yt_downloader/core/constants/urls.dart';
 import 'package:yt_downloader/core/di/injectable.dart';
 import 'package:yt_downloader/core/enums/enums.dart';
-import 'package:yt_downloader/core/helpers/helpers.dart';
 import 'package:yt_downloader/domain/download_yt_vid/i_download_repo.dart';
 import 'package:yt_downloader/core/database/db_vid.dart';
 import 'package:yt_downloader/domain/models/vid_metadata.dart';
@@ -21,7 +19,6 @@ class YtDownloadBloc extends Bloc<YtDownloadEvent, YtDownloadState> {
     final IDownloadYtVidRepo downloadRepo = getIt<IDownloadYtVidRepo>();
 
     /// Handles the event to download a YouTube video.
-    /// This event handler is responsible for the following:
     on<DownloadYtVideo>((event, emit) async {
       final vidFromDb = event.vidDatabaseBloc.state.videos;
 
@@ -33,10 +30,7 @@ class YtDownloadBloc extends Bloc<YtDownloadEvent, YtDownloadState> {
       }
 
       /// - Requests storage permission if the video is new.
-      final osVersion = await Helpers.getAndroidVersion();
-      bool permissionGranted = await Helpers.requestPermission(
-          int.parse(osVersion!) > 12 ? Permission.videos : Permission.storage);
-      if (state.isNewVideo! && permissionGranted) {
+      if (state.isNewVideo!) {
         try {
           emit(state.copyWith(
               ytMeataDataApiStatus: ApiStatus.loading,
